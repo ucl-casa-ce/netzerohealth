@@ -1,12 +1,15 @@
 
 #include <ArduinoBLE.h>
-BLEService newService("180A"); // creating the service
+#include "ClosedCube_HDC1080.h"
 
+//BLE Region
+BLEService newService("180A"); // creating the service
 BLEStringCharacteristic randomReading("2A58", BLERead | BLENotify, 100); // creating the Analog Value characteristic
 BLEByteCharacteristic switchChar("2A57", BLERead | BLEWrite); // creating the LED characteristic
 
 const int ledPin = 2;
 long previousMillis = 0;
+//End BLE Region
 
 #include <Wire.h>
 #include "Adafruit_MPRLS.h"
@@ -17,7 +20,7 @@ long previousMillis = 0;
 /* Create an rtc object */
 
 RTCZero rtc;
-
+ClosedCube_HDC1080 hdc1080;
 const int chipSelect = 4;
 
 // You dont *need* a reset and EOC pin for most uses, so we set to -1 and don't connect
@@ -47,6 +50,10 @@ void setup() {
   }
   Serial.println("Found MPRLS sensor");
 
+  hdc1080.begin(0x40);
+
+//BLE Region
+
    if (!BLE.begin()) {
     Serial.println("starting Bluetooth® Low Energy failed!");
     while (1);
@@ -65,7 +72,7 @@ void setup() {
 
   BLE.advertise(); //start advertising the service
   Serial.println(" Bluetooth® device active, waiting for connections...");
-
+//End BLE Region
 
 }
 
@@ -95,10 +102,20 @@ void loop() {
     String dataString = "";
 
     float pressure_hPa = mpr.readPressure();
+
+    delay(20);
+    float tmp = hdc1080.readTemperature();
+    delay(20);
+    float hum = hdc1080.readHumidity();
+    
     //Serial.print("Pressure (hPa): ");
     dataString += currentTime;
     dataString += ",";
     dataString += String(pressure_hPa);
+    dataString += ",";
+    dataString += String(tmp);
+    dataString += ",";
+    dataString += String(hum);
     Serial.println(dataString);
 
     // open the file. note that only one file can be open at a time,
@@ -121,6 +138,7 @@ void loop() {
   //Serial.print("Pressure (PSI): "); Serial.println(pressure_hPa / 68.947572932);
   //delay(1000);
 
+//BLE Region
   BLEDevice central = BLE.central();
   if (central) {  // if a central is connected to the peripheral
     Serial.print("Connected to central: ");
@@ -155,6 +173,7 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW); // when the central disconnects, turn off the LED
     Serial.print("Disconnected from central: ");
     Serial.println(central.address());
+//End BLE Region
   }
 }
 
