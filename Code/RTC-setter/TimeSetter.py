@@ -8,6 +8,7 @@ serialPort = serial.Serial(port=serialPortNo, baudrate=115200, bytesize=8, timeo
 now = datetime.datetime.now()
 #example: 50,37,20,17,11,23
 
+print("Sending datetime set command to serial device: " + serialPortNo)
 dt_string = now.strftime("%S,%M,%H,%d,%m,%y")
 print(dt_string)
 
