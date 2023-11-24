@@ -1,6 +1,9 @@
 
 #include <ArduinoBLE.h>
-#include "ClosedCube_HDC1080.h"
+//#include "ClosedCube_HDC1080.h"
+
+#include "SparkFun_Si7021_Breakout_Library.h"
+#include <Wire.h>
 
 //BLE Region
 BLEService newService("180A"); // creating the service
@@ -23,7 +26,8 @@ long previousMillis = 0;
 /* Create an rtc object */
 
 RTCZero rtc;
-ClosedCube_HDC1080 hdc1080;
+//ClosedCube_HDC1080 hdc1080;
+Weather sensor;
 const int chipSelect = 4;
 
 // You dont *need* a reset and EOC pin for most uses, so we set to -1 and don't connect
@@ -64,7 +68,7 @@ void setup() {
   }
   Serial.println("Found MPRLS sensor");
 
-  hdc1080.begin(0x40);
+  //hdc1080.begin(0x40);
 
 //BLE Region
 
@@ -119,9 +123,13 @@ void loop() {
     float pressure_hPa = mpr.readPressure();
 
     delay(20);
-    float tmp = hdc1080.readTemperature();
+    
+    //float tmp = hdc1080.readTemperature();
+    float tmp = sensor.getTemp();
+    
     delay(20);
-    float hum = hdc1080.readHumidity();
+    //float hum = hdc1080.readHumidity();
+    float hum = sensor.getRH();
     
     //Serial.print("Pressure (hPa): ");
     dataString += currentTime;
