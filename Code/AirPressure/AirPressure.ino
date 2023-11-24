@@ -16,6 +16,9 @@ long previousMillis = 0;
 #include <SPI.h>
 #include <SD.h>
 #include <RTCZero.h>
+#include <WiFiNINA.h>  
+#include <utility/wifi_drv.h> 
+
 
 /* Create an rtc object */
 
@@ -31,19 +34,30 @@ Adafruit_MPRLS mpr = Adafruit_MPRLS(RESET_PIN, EOC_PIN);
 void setup() {
   Serial.begin(115200);
   rtc.begin();
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+
+   // RGB LED's
+  WiFiDrv::pinMode(25, OUTPUT); // G
+  WiFiDrv::pinMode(26, OUTPUT); // R
+  WiFiDrv::pinMode(27, OUTPUT); // B  
+
+  blinkRGB(500, 2, 20, 150, 150);
   Serial.print("Initializing SD card...");
 
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
     // don't do anything more:
-    //while (1);
+    blinkRGB(500, 2, 250, 0, 0);
+    while (1);
   }
   Serial.println("card initialized.");
 
   Serial.println("MPRLS Simple Test");
   if (! mpr.begin()) {
     Serial.println("Failed to communicate with MPRLS sensor, check wiring?");
+    blinkRGB(500, 2, 0, 250, 0);
     while (1) {
       delay(10);
     }
@@ -56,6 +70,7 @@ void setup() {
 
    if (!BLE.begin()) {
     Serial.println("starting Bluetooth® Low Energy failed!");
+    blinkRGB(500, 2, 0, 0, 250);
     while (1);
   }
 
@@ -127,7 +142,7 @@ void loop() {
       dataFile.println(dataString);
       dataFile.close();
       // print to the serial port too:
-      Serial.println(dataString);
+      //Serial.println(dataString);
     }
     // if the file isn't open, pop up an error:
     else {
@@ -235,4 +250,19 @@ String splitString(String data, char separator, int index)
   }
 
   return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
+void blinkRGB(int ms, int loops, int r, int g, int b){
+  while(loops){
+    WiFiDrv::analogWrite(25, r);
+    WiFiDrv::analogWrite(26, g);
+    WiFiDrv::analogWrite(27, b);
+    delay(ms);
+    WiFiDrv::analogWrite(25, 0);
+    WiFiDrv::analogWrite(26, 0);
+    WiFiDrv::analogWrite(27, 0);
+    delay(ms);
+    loops-=1;   
+  }
+
 }
