@@ -38,36 +38,36 @@ def insertCSV(OAT_CSVFile, topic):
             print(date) 
 
 ## Data Part 1
-insertCSV('datasets1\BoilerFlow_celsius.csv', "Queens/theatre/4/BoilerFlow_celsius")
-insertCSV('datasets1\BoilerReturn_celsius.csv', "Queens/theatre/4/BoilerReturn_celsius")
-insertCSV('datasets1\ChillerFlow_celsius.csv', "Queens/theatre/4/ChillerFlow_celsius")
-insertCSV('datasets1\ChillerReturn_celsius.csv', "Queens/theatre/4/ChillerReturn_celsius")
-insertCSV('datasets1\OATemp_celsius.csv', "Queens/theatre/4/OATemp_celsius")
-insertCSV('datasets1\ReturnAirTemp_celsius.csv', "Queens/theatre/4/ReturnAirTemp_celsius")
+insertCSV('datasets1\BoilerFlow_celsius.csv', "Netzero/Queens/theatre/4/BoilerFlow_celsius")
+insertCSV('datasets1\BoilerReturn_celsius.csv', "Netzero/Queens/theatre/4/BoilerReturn_celsius")
+insertCSV('datasets1\ChillerFlow_celsius.csv', "Netzero/Queens/theatre/4/ChillerFlow_celsius")
+insertCSV('datasets1\ChillerReturn_celsius.csv', "Netzero/Queens/theatre/4/ChillerReturn_celsius")
+insertCSV('datasets1\OATemp_celsius.csv', "Netzero/Queens/theatre/4/OATemp_celsius")
+insertCSV('datasets1\ReturnAirTemp_celsius.csv', "Netzero/Queens/theatre/4/ReturnAirTemp_celsius")
 
-insertCSV('datasets1\CoolingValve_percent.csv', "Queens/theatre/4/CoolingValve_percent")
-insertCSV('datasets1\FrostValve_percent.csv', "Queens/theatre/4/FrostValve_percent")
-insertCSV('datasets1\HeatingValve_percent.csv', "Queens/theatre/4/HeatingValve_percent")
+insertCSV('datasets1\CoolingValve_percent.csv', "Netzero/Queens/theatre/4/CoolingValve_percent")
+insertCSV('datasets1\FrostValve_percent.csv', "Netzero/Queens/theatre/4/FrostValve_percent")
+insertCSV('datasets1\HeatingValve_percent.csv', "Netzero/Queens/theatre/4/HeatingValve_percent")
 
-insertCSV('datasets1\RoomHumidity_RH.csv', "Queens/theatre/4/RoomHumidity_RH")
-insertCSV('datasets1\RunAroundPmpCMD_OnOff.csv', "Queens/theatre/4/RunAroundPmpCMD_OnOff")
-insertCSV('datasets1\Setback_OnOff.csv', "Queens/theatre/4/Setback_OnOff")
+insertCSV('datasets1\RoomHumidity_RH.csv', "Netzero/Queens/theatre/4/RoomHumidity_RH")
+insertCSV('datasets1\RunAroundPmpCMD_OnOff.csv', "Netzero/Queens/theatre/4/RunAroundPmpCMD_OnOff")
+insertCSV('datasets1\Setback_OnOff.csv', "Netzero/Queens/theatre/4/Setback_OnOff")
 
 
 
 
 ## Data Part 2
-insertCSV('datasets2\BoilerFlow_celsius.csv', "Queens/theatre/4/BoilerFlow_celsius")
-insertCSV('datasets2\BoilerReturn_celsius.csv', "Queens/theatre/4/BoilerReturn_celsius")
-insertCSV('datasets2\ChillerFlow_celsius.csv', "Queens/theatre/4/ChillerFlow_celsius")
-insertCSV('datasets2\ChillerReturn_celsius.csv', "Queens/theatre/4/ChillerReturn_celsius")
-insertCSV('datasets2\OATemp_celsius.csv', "Queens/theatre/4/OATemp_celsius")
-insertCSV('datasets2\ReturnAirTemp_celsius.csv', "Queens/theatre/4/ReturnAirTemp_celsius")
+insertCSV('datasets2\BoilerFlow_celsius.csv', "Netzero/Queens/theatre/4/BoilerFlow_celsius")
+insertCSV('datasets2\BoilerReturn_celsius.csv', "Netzero/Queens/theatre/4/BoilerReturn_celsius")
+insertCSV('datasets2\ChillerFlow_celsius.csv', "Netzero/Queens/theatre/4/ChillerFlow_celsius")
+insertCSV('datasets2\ChillerReturn_celsius.csv', "Netzero/Queens/theatre/4/ChillerReturn_celsius")
+insertCSV('datasets2\OATemp_celsius.csv', "Netzero/Queens/theatre/4/OATemp_celsius")
+insertCSV('datasets2\ReturnAirTemp_celsius.csv', "Netzero/Queens/theatre/4/ReturnAirTemp_celsius")
 
-insertCSV('datasets2\CoolingValve_percent.csv', "Queens/theatre/4/CoolingValve_percent")
-insertCSV('datasets2\FrostValve_percent.csv', "Queens/theatre/4/FrostValve_percent")
-insertCSV('datasets2\HeatingValve_percent.csv', "Queens/theatre/4/HeatingValve_percent")
+insertCSV('datasets2\CoolingValve_percent.csv', "Netzero/Queens/theatre/4/CoolingValve_percent")
+insertCSV('datasets2\FrostValve_percent.csv', "Netzero/Queens/theatre/4/FrostValve_percent")
+insertCSV('datasets2\HeatingValve_percent.csv', "Netzero/Queens/theatre/4/HeatingValve_percent")
 
-insertCSV('datasets2\RoomHumidity_RH.csv', "Queens/theatre/4/RoomHumidity_RH")
-insertCSV('datasets2\RoomTemperature_celsius.csv', "Queens/theatre/4/RoomTemperature_celsius")
+insertCSV('datasets2\RoomHumidity_RH.csv', "Netzero/Queens/theatre/4/RoomHumidity_RH")
+insertCSV('datasets2\RoomTemperature_celsius.csv', "Netzero/Queens/theatre/4/RoomTemperature_celsius")
 
