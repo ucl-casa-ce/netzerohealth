@@ -1,2 +1,4 @@
 Code/AirPressureWifi/arduino_secrets.h
 Code/AirPressureLTE/arduino_secrets.h
+Code/Eduroam/arduino_secrets.h
+Code/AirPressureEduroam/arduino_secrets.h
