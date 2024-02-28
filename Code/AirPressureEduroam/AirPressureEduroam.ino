@@ -22,11 +22,15 @@
 #include "esp_wpa2.h" //wpa2 library for connections to Enterprise networks
 //Connectivity imports
 #include <PubSubClient.h>
+#include "MedianFilterLib.h" //Median library: https://www.arduino.cc/reference/en/libraries/medianfilterlib/
 #include "arduino_secrets.h" // Wifi and MQTT secrets 
 
 #define RESET_PIN  -1  // set to any GPIO pin # to hard-reset on begin()
 #define EOC_PIN    -1  // set to any GPIO pin to read end-of-conversion by pin
 Adafruit_MPRLS mpr = Adafruit_MPRLS(RESET_PIN, EOC_PIN);
+const int readingNum = 25;
+
+MedianFilter<float> medianFilter(readingNum); //size of window
 
 //Identity for user with password related to his realm (organization)
 //Available option of anonymous identity for federation of RADIUS servers or 1st Domain RADIUS servers
@@ -101,23 +105,21 @@ void loop() {
   }
   client.loop();
 
-  int readingNum = 50;
-  float readings[readingNum];
+    
+  float Pressure_Pa_median;
   
   for(int i = 0; i< readingNum ; i++){
-    delay(250);
     float pressure_hPa = mpr.readPressure();
-    readings[i] = pressure_hPa;
-    Serial.print("Pressure (Pa): "); Serial.println(pressure_hPa*100);
+    Serial.print("Pressure (hPa): "); Serial.println(pressure_hPa);
+    float pressure_Pa = pressure_hPa*100;
+    Serial.print("Pressure (Pa): "); Serial.println(pressure_Pa);
+    Pressure_Pa_median = medianFilter.AddValue(pressure_Pa);
+    Serial.print("Pressure (Pa) median: "); Serial.println(Pressure_Pa_median);
+    delay(600);    
   } 
 
-  float sum = 0;
-  for(int i = 0; i< readingNum ; i++){
-    sum += readings[i];
-  }
-  float averagePa = (sum/readingNum)*100;
-  Serial.print("------ Pressure average (Pa): "); Serial.println((int) averagePa);
-  sendMQTT(String((int) averagePa));
+  Serial.print("------ Pressure (Pa) median: "); Serial.println((int) Pressure_Pa_median);
+  sendMQTT(String((int) Pressure_Pa_median));
 }
 
 void sendMQTT(String pressure_hPa) {
@@ -130,7 +132,7 @@ void sendMQTT(String pressure_hPa) {
   char msg[50];
   pressure_hPa.toCharArray(msg,pressure_hPa.length()+1);
   //client.publish("student/NetZero/OPS/206/sensor1/pressure_Pa", msg);
-  client.publish("student/CASA0014/plant/ucfnmyr/pressure_Pa2", msg);
+  client.publish("student/CASA0014/plant/ucfnmyr/medianPressure_Pa5", msg);
 }
 
 //MQTT reconnection, taken from CASA plant monitoring class
