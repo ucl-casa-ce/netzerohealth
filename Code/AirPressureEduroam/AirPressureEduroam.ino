@@ -52,26 +52,10 @@ PubSubClient client(espClient);
 
 void setup() {
   Serial.begin(115200);
-  delay(10);
-  Serial.print(F("Connecting to network: "));
-  Serial.println(ssid);
-  WiFi.disconnect(true);  //disconnect from WiFi to set new WiFi connection
-  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_ANONYMOUS_IDENTITY, EAP_IDENTITY, EAP_PASSWORD, test_root_ca); //with CERTIFICATE 
-  WiFi.begin(ssid, WPA2_AUTH_PEAP, wifi_identity, wifi_username, wifi_password); // without CERTIFICATE, RADIUS server EXCEPTION "for old devices" required
-
-  // Example: a cert-file WPA2 Enterprise with PEAP - client certificate and client key required
-  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD, test_root_ca, client_cert, client_key);
-
-  // Example: TLS with cert-files and no password - client certificate and client key required
-  //WiFi.begin(ssid, WPA2_AUTH_TLS, EAP_IDENTITY, NULL, NULL, test_root_ca, client_cert, client_key);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(F("."));
-  }
-  Serial.println("");
-  Serial.println(F("WiFi is connected!"));
-  Serial.println(F("IP address set: "));
-  Serial.println(WiFi.localIP()); //print LAN IP
+  
+  WiFi.disconnect(true);
+  WiFi.onEvent(WiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+  ConnectWifi();
 
   client.setServer(mqtt_server, mqtt_port);
     while (!client.connected()) {
@@ -100,6 +84,7 @@ void setup() {
 }
 
 void loop() {
+  if(WiFi.status() == WL_CONNECTED){
   if (!client.connected()) {
     reconnect();
   }
@@ -120,6 +105,7 @@ void loop() {
 
   Serial.print("------ Pressure (Pa) median: "); Serial.println((int) Pressure_Pa_median);
   sendMQTT(String((int) Pressure_Pa_median));
+  }
 }
 
 void sendMQTT(String pressure_hPa) {
@@ -132,13 +118,13 @@ void sendMQTT(String pressure_hPa) {
   char msg[50];
   pressure_hPa.toCharArray(msg,pressure_hPa.length()+1);
   //client.publish("student/NetZero/OPS/206/sensor1/pressure_Pa", msg);
-  client.publish("student/CASA0014/plant/ucfnmyr/medianPressure_Pa5", msg);
+  client.publish("student/CASA0014/plant/ucfnmyr/medianPressure_Pa2", msg);
 }
 
 //MQTT reconnection, taken from CASA plant monitoring class
 void reconnect() {
   // Loop until we're reconnected
-  while (!client.connected()) {    // while not (!) connected....
+  while (!client.connected() && WiFi.status() == WL_CONNECTED) {    // while not (!) connected....
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
     String clientId = "NetZero-";
@@ -157,4 +143,34 @@ void reconnect() {
       delay(5000);
     }
   }
+}
+void ConnectWifi(){
+  delay(1000);
+  Serial.print(F("Connecting to network: "));
+  Serial.println(ssid);
+  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_ANONYMOUS_IDENTITY, EAP_IDENTITY, EAP_PASSWORD, test_root_ca); //with CERTIFICATE 
+  WiFi.begin(ssid, WPA2_AUTH_PEAP, wifi_identity, wifi_username, wifi_password); // without CERTIFICATE, RADIUS server EXCEPTION "for old devices" required
+
+  // Example: a cert-file WPA2 Enterprise with PEAP - client certificate and client key required
+  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD, test_root_ca, client_cert, client_key);
+
+  // Example: TLS with cert-files and no password - client certificate and client key required
+  //WiFi.begin(ssid, WPA2_AUTH_TLS, EAP_IDENTITY, NULL, NULL, test_root_ca, client_cert, client_key);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(F(".c"));
+  }
+  Serial.println("");
+  Serial.println(F("WiFi is connected!"));
+  Serial.println(F("IP address set: "));
+  Serial.println(WiFi.localIP()); //print LAN IP
+  
+}
+void WiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info){
+  Serial.println("Disconnected from WiFi access point");
+  Serial.print("WiFi lost connection. Reason: ");
+  Serial.println(info.wifi_sta_disconnected.reason);
+  Serial.println("Trying to Reconnect");
+  delay(1000);
+  WiFi.reconnect();
 }
